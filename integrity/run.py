@@ -1,15 +1,17 @@
 import logging
 
-from log import log
+from integrity.log import log
+from integrity.data import Data
+from integrity.check import check
 
 
-def check(dataset_file, console=True, logfile=None, warnfile=None):
+def checker(dataset_zipfile, console=True, logfile=None, warnfile=None):
     """
     Top level integrity checker of Numerai dataset.
 
     Parameters
     ----------
-    dataset_file : str
+    dataset_zipfile : str
         File path of zipped Numerai dataset.
     console : bool
         Whether logging output should be sent to console / stdout.
@@ -25,14 +27,22 @@ def check(dataset_file, console=True, logfile=None, warnfile=None):
     None is returned. All other output is through Python logging.
     """
 
+    # set up behavior of python logging
+    # will change any package's python logging in the same session as well
     log(console=console, logfile=logfile, warnfile=warnfile)
 
-    logging.info("Integrity check of {}".format(dataset_file))
+    logging.info("Integrity check of {}".format(dataset_zipfile))
+    data = Data(dataset_zipfile)
+    check(data)
 
 
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', dest='dataset_file', default=None)
+    parser.add_argument('-d', dest='dataset_zipfile', default=None)
+    parser.add_argument('-l', dest='logfile', default=None)
+    parser.add_argument('-w', dest='warnfile', default=None)
     args = parser.parse_args()
-    check(dataset_file=args.dataset_file)
+    checker(dataset_zipfile=args.dataset_zipfile,
+            logfile=args.logfile,
+            warnfile=args.warnfile)
