@@ -7,12 +7,8 @@ To test the integrity of a Numerai dataset::
     Integrity check of numerai_dataset_20171004.zip
     interval of feature 46 [ 0.0000,  1.0060] outside of [0, 1]
 
-You can optionally write to a logfile and a warnfile::
-
-    $ python integrity/run.py -d numerai_dataset_20171004.zip \
-      -l logfile.txt -w warnfile.txt
-    Integrity check of /path/to/numerai_dataset_20171004.zip
-    interval of feature 46 [ 0.0000,  1.0060] outside of [0, 1]
+You can optionally write to a logfile and a warnfile by appending
+`-l logfile.txt` and `-w warnfile.txt` to the command above.
 
 Let's look inside the files::
 
