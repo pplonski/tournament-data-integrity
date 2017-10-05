@@ -20,7 +20,7 @@ def log(console=True, logfile=None, warnfile=None):
 
     # log
     fmt = '%(asctime)s %(message)s'
-    datefmt = '%Y-%d-%m %H:%M:%S'
+    datefmt = '%Y-%m-%d %H:%M:%S'
     logging.basicConfig(filename=logfile, level=LOG_LEVEL_FILE, format=fmt,
                         datefmt=datefmt)
 

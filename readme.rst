@@ -17,8 +17,8 @@ You can optionally write to a logfile and a warnfile::
 Let's look inside the files::
           
     $ cat logfile.txt 
-    2017-05-10 15:47:39 Integrity check of /data/ni/numerai_dataset_20171004.zip
-    2017-05-10 15:48:08 interval of feature 46 [ 0.0000,  1.0060] outside of [0, 1]
+    2017-10-05 15:47:39 Integrity check of /data/ni/numerai_dataset_20171004.zip
+    2017-10-05 15:48:08 interval of feature 46 [ 0.0000,  1.0060] outside of [0, 1]
 
     $ cat warnfile.txt 
-    2017-05-10 15:48:08 [check.py:18] interval of feature 46 [ 0.0000,  1.0060] outside of [0, 1]
+    2017-10-05 15:48:08 [check.py:18] interval of feature 46 [ 0.0000,  1.0060] outside of [0, 1]
