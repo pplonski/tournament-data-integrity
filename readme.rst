@@ -8,7 +8,7 @@ To test the integrity of a Numerai dataset::
     interval of feature 46 [ 0.0000,  1.0060] outside of [0, 1]
 
 You can optionally write to a logfile and a warnfile by appending
-`-l logfile.txt` and `-w warnfile.txt` to the command above.
+``-l logfile.txt`` and ``-w warnfile.txt`` to the command above.
 
 Let's look inside the files::
 
