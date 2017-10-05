@@ -14,11 +14,17 @@ class Data(object):
         data = load_dataset(dataset_file)
         self.ID, self.era, self.region, self.x, self.y = data
         self.unique_era = np.unique(self.era)
+        self.unique_region = np.unique(self.region)
 
     def era_iter(self):
         for e in self.unique_era:
             idx = self.era == e
             yield e, self.x[idx], self.y[idx]
+
+    def region_iter(self):
+        for r in self.unique_region:
+            idx = self.region == r
+            yield r, self.x[idx], self.y[idx]
 
     def feature_iter(self):
         for i in range(self.x.shape[1]):
