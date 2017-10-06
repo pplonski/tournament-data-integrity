@@ -33,6 +33,10 @@ def features(data):
         msg = 'std  of feature %2d in %s' % (feature_num, era.ljust(6))
         interval(msg, x.std(), [0.09, 0.14])
 
+        msg = 'skew of feature %2d in %s' % (feature_num, era.ljust(6))
+        skew = ((x - x.mean())**3).mean() / x.std()**3
+        interval(msg, skew, [-0.4, 0.4])
+
 
 def regions(data):
     pass
