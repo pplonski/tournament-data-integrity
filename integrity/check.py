@@ -14,14 +14,22 @@ def check(data):
 
 
 def ids(data):
-    pass
+
+    logging.info('IDS')
+
+    # duplicate ids
+    num_duplicate = data.ID.size - np.unique(data.ID).size
+    equal('duplicate ids', num_duplicate, 0)
 
 
 def eras(data):
-    pass
+
+    logging.info('ERAS')
 
 
 def features(data):
+
+    logging.info('FEATURES')
 
     # nonfinite feature values
     n = (~np.isfinite(data.x)).sum()
@@ -56,31 +64,37 @@ def features(data):
 
 
 def regions(data):
-    pass
+
+    logging.info('REGIONS')
 
 
 def labels(data):
-    pass
+
+    logging.info('LABELS')
 
 
 def predictions(data):
-    pass
+
+    logging.info('PREDICTIONS')
 
 
 # ---------------------------------------------------------------------------
 # logging utilities
 
+TAB = '  '
+
+
 def equal(message, value, target, level='warn'):
     if value != target:
         log = get_logger(level)
-        fmt = message + " %7.4f != %s"
+        fmt = TAB + message + " %7.4f != %s"
         log(fmt % (value, str(target)))
 
 
 def interval(message, value, limit, level='warn'):
     if value < limit[0] or value > limit[1]:
         log = get_logger(level)
-        fmt = message + " %7.4f not in %s"
+        fmt = TAB + message + " %7.4f not in %s"
         log(fmt % (value, str(limit)))
 
 
@@ -88,7 +102,7 @@ def array_interval(message, arr, limit, level='warn'):
     amin, amax = arr.min(), arr.max()
     if amin < limit[0] or amax > limit[1]:
         log = get_logger(level)
-        fmt = message + " [%7.4f, %7.4f] not in %s"
+        fmt = TAB + message + " [%7.4f, %7.4f] not in %s"
         log(fmt % (amin, amax, str(limit)))
 
 

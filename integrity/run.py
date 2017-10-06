@@ -29,11 +29,13 @@ def checker(dataset_zipfile, console=True, logfile=None, warnfile=None):
     """
     t0 = time.time()
     config_logging(console=console, logfile=logfile, warnfile=warnfile)
-    logging.info("Integrity check of {}".format(dataset_zipfile))
+    logging.info("INTEGRITY")
+    logging.info("  {}".format(dataset_zipfile))
     data = Data(dataset_zipfile)
     check(data)
     t = time.time()
-    logging.info("Integrity check done in %d seconds" % (t - t0))
+    logging.info("DONE")
+    logging.info("  integrity check in %d second" % (t - t0))
 
 
 def config_logging(console=True, logfile=None, warnfile=None):
