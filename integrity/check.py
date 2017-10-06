@@ -4,10 +4,23 @@ HI = 1
 
 
 def check(data):
-    bound(data)
+    ids(data)
+    eras(data)
+    regions(data)
+    features(data)
+    labels(data)
+    predictions(data)
 
 
-def bound(data):
+def ids(data):
+    pass
+
+
+def eras(data):
+    pass
+
+
+def features(data):
 
     # feature bounds
     interval = [0, 1]
@@ -16,3 +29,15 @@ def bound(data):
         if fmin < interval[LO] or fmax > interval[HI]:
             fmt = "interval of feature %2d [%7.4f, %7.4f] outside of %s"
             logging.warn(fmt % (i, fmin, fmax, str(interval)))
+
+
+def regions(data):
+    pass
+
+
+def labels(data):
+    pass
+
+
+def predictions(data):
+    pass
