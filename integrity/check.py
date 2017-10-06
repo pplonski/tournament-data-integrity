@@ -26,6 +26,16 @@ def eras(data):
 
     logging.info('ERAS')
 
+    # number of eras
+    target = {'train': 85,
+              'validation': 12,
+              'test': 1,
+              'live': 1}
+    for region in target:
+        n = np.unique(data.era[data.region == region]).size
+        msg = 'number of eras in %s' % region
+        equal(msg, n, target[region])
+
 
 def features(data):
 
