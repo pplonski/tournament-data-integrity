@@ -72,6 +72,25 @@ def labels(data):
 
     logging.info('LABELS')
 
+    # labels should only contain 0 and 1
+    idx = data.index_of_nonmissing_labels()
+    y = data.y[idx]
+    idx = np.logical_or(y == 0, y == 1)
+    equal("number of non 0, 1 labels", idx.size - idx.sum(), 0)
+
+    # mean of labels and number of labels
+    for era, y in data.era_label_iter():
+
+        msg = 'mean of labels in %s' % era.ljust(6)
+        interval(msg, y.mean(), [0.499, 0.501])
+
+        msg = 'num  of labels in %s' % era.ljust(6)
+        if era == 'eraX':
+            limit = [270000, 280000]
+        else:
+            limit = [5940, 6750]
+        interval(msg, y.size, limit)
+
 
 def predictions(data):
 

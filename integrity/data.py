@@ -37,6 +37,16 @@ class Data(object):
             for i in range(xi.shape[1]):
                 yield e, i, xi[:, i]
 
+    def era_label_iter(self):
+        for e in self.unique_era:
+            idx = self.era == e
+            yield e, self.y[idx]
+
+    def index_of_nonmissing_labels(self):
+        region = self.region
+        idx = np.logical_or(region == 'train', region == 'validation')
+        return idx
+
     def __repr__(self):
         x = []
         x.append("%s" % self.dataset_file)
