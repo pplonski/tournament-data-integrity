@@ -59,7 +59,7 @@ def config_logging(console=True, logfile=None, warnfile=None):
                         datefmt=datefmt)
 
     # warnings log
-    fmt = '%(asctime)s [%(filename)s:%(lineno)d] %(message)s'
+    fmt = '%(asctime)s %(message)s'
     warn = logging.FileHandler(warnfile)
     warn.setLevel(logging.WARNING)
     formatter = logging.Formatter(fmt=fmt, datefmt=datefmt)
