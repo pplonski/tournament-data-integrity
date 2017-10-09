@@ -18,17 +18,13 @@ class Data(object):
 
     def era_iter(self):
         for e in self.unique_era:
-            idx = self.era == e
-            yield e, self.x[idx], self.y[idx]
+            index = self.era == e
+            yield e, index
 
     def region_iter(self):
         for r in self.unique_region:
-            idx = self.region == r
-            yield r, self.x[idx], self.y[idx]
-
-    def feature_iter(self):
-        for i in range(self.x.shape[1]):
-            yield i, self.x[:, i]
+            index = self.region == r
+            yield r, index
 
     def era_feature_iter(self):
         for e in self.unique_era:
@@ -37,15 +33,10 @@ class Data(object):
             for i in range(xi.shape[1]):
                 yield e, i, xi[:, i]
 
-    def era_label_iter(self):
-        for e in self.unique_era:
-            idx = self.era == e
-            yield e, self.y[idx]
-
-    def index_of_nonmissing_labels(self):
+    def nonmissing_label_index(self):
         region = self.region
-        idx = np.logical_or(region == 'train', region == 'validation')
-        return idx
+        index = np.logical_or(region == 'train', region == 'validation')
+        return index
 
     def __repr__(self):
         x = []
