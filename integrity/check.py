@@ -1,5 +1,8 @@
 import logging
+
 import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import log_loss
 
 from ni.util import upper_triangle
 
@@ -126,6 +129,50 @@ def labels(data):
 def predictions(data):
 
     logging.info('PREDICTIONS')
+
+    # fit logistic regression model on train data
+    idx = data.region == 'train'
+    xtrain = data.x[idx]
+    ytrain = data.y[idx]
+    eratrain = data.era[idx]
+    clf = LogisticRegression()
+    clf.fit(xtrain, ytrain)
+
+    # predict using train data
+    yhat = clf.predict_proba(xtrain)[:, 1]
+
+    # check train logloss and consistency
+    logloss = log_loss(ytrain, yhat)
+    interval('train logloss', logloss, [0.68, 0.688])
+    loglosses = logloss_by_era(eratrain, ytrain, yhat)
+    consistency = (loglosses < np.log(2)).mean()
+    interval('train consistency', consistency, [0.57, 0.84])
+
+    # predict using validation data
+    idx = data.region == 'validation'
+    xvalid = data.x[idx]
+    yvalid = data.y[idx]
+    eravalid = data.era[idx]
+    yhat = clf.predict_proba(xvalid)[:, 1]
+
+    # check validation logloss and consistency
+    logloss = log_loss(yvalid, yhat)
+    interval('validation logloss', logloss, [0.68, 0.688])
+    loglosses = logloss_by_era(eravalid, yvalid, yhat)
+    consistency = (loglosses < np.log(2)).mean()
+    interval('validation consistency', consistency, [0.57, 0.84])
+
+
+def logloss_by_era(era, y, yhat):
+    unique_eras = np.unique(era)
+    n = unique_eras.size
+    logloss = np.zeros(n)
+    for i in range(n):
+        idx = era == unique_eras[i]
+        yi = y[idx]
+        yh = yhat[idx]
+        logloss[i] = log_loss(yi, yh)
+    return logloss
 
 
 # ---------------------------------------------------------------------------

@@ -167,6 +167,7 @@ Requirements
 
 - Python
 - NumPy
+- sklearn
 
 License
 =======
