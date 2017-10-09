@@ -139,28 +139,39 @@ def predictions(data):
     clf.fit(xtrain, ytrain)
 
     # predict using train data
-    yhat = clf.predict_proba(xtrain)[:, 1]
+    yhat_train = clf.predict_proba(xtrain)[:, 1]
 
     # check train logloss and consistency
-    logloss = log_loss(ytrain, yhat)
+    logloss = log_loss(ytrain, yhat_train)
     interval('train logloss', logloss, [0.68, 0.688])
-    loglosses = logloss_by_era(eratrain, ytrain, yhat)
+    loglosses = logloss_by_era(eratrain, ytrain, yhat_train)
     consistency = (loglosses < np.log(2)).mean()
     interval('train consistency', consistency, [0.57, 0.84])
 
     # predict using validation data
-    idx = data.region == 'validation'
-    xvalid = data.x[idx]
-    yvalid = data.y[idx]
-    eravalid = data.era[idx]
-    yhat = clf.predict_proba(xvalid)[:, 1]
+    yvalid, yhat = calc_yhat('validation', clf, data)
 
     # check validation logloss and consistency
     logloss = log_loss(yvalid, yhat)
     interval('validation logloss', logloss, [0.68, 0.688])
-    loglosses = logloss_by_era(eravalid, yvalid, yhat)
+    idx = data.region == 'validation'
+    loglosses = logloss_by_era(data.era[idx], yvalid, yhat)
     consistency = (loglosses < np.log(2)).mean()
     interval('validation consistency', consistency, [0.57, 0.84])
+
+    # check test and live predictions
+    for region in ('test', 'live'):
+        y, yhat = calc_yhat(region, clf, data)
+        target = [0.99 * yhat_train.min(), 1.01 * yhat_train.max()]
+        array_interval('predictions in %s region' % region, yhat, target)
+
+
+def calc_yhat(region, clf, data):
+    idx = data.region == region
+    x = data.x[idx]
+    y = data.y[idx]
+    yhat = clf.predict_proba(x)[:, 1]
+    return y, yhat
 
 
 def logloss_by_era(era, y, yhat):
