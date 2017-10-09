@@ -77,6 +77,17 @@ def regions(data):
 
     logging.info('REGIONS')
 
+    # make sure all regions are present and there are no extra regions
+    target = set(['train', 'validation', 'test', 'live'])
+    regions = set(np.unique(data.region))
+    if regions != target:
+        diff = regions - target
+        if len(diff) > 0:
+            logging.warn('extra regions found: %s' % str(diff))
+        diff = target - regions
+        if len(diff) > 0:
+            logging.warn('missing regions: %s' % str(diff))
+
 
 def labels(data):
 
