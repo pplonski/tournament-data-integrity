@@ -89,12 +89,15 @@ def labels(data):
     _assert("number of non 0, 1 labels", idx.size - idx.sum(), '==', 0)
 
     # mean of labels and number of labels
+    y_mean = []
     for era, index in data.era_iter():
 
         y = data.y[index]
 
         msg = 'mean of labels in %s' % era.ljust(6)
-        interval(msg, y.mean(), [0.499, 0.501])
+        ym = y.mean()
+        interval(msg, ym, [0.499, 0.501])
+        y_mean.append(ym)
 
         msg = 'num  of labels in %s' % era.ljust(6)
         if era == 'eraX':
@@ -102,6 +105,11 @@ def labels(data):
         else:
             limit = [5940, 6750]
         interval(msg, y.size, limit)
+
+    # label bias
+    msg = 'fraction of eras with label mean less than half'
+    y_mean = np.array(y_mean)
+    interval(msg, (y_mean < 0.5).mean(), [0.4, 0.6])
 
 
 def predictions(data):
