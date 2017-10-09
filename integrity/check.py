@@ -86,7 +86,7 @@ def labels(data):
     idx = data.nonmissing_label_index()
     y = data.y[idx]
     idx = np.logical_or(y == 0, y == 1)
-    equal("number of non 0, 1 labels", idx.size - idx.sum(), 0)
+    _assert("number of non 0, 1 labels", idx.size - idx.sum(), '==', 0)
 
     # mean of labels and number of labels
     for era, index in data.era_iter():
@@ -113,13 +113,6 @@ def predictions(data):
 # logging utilities
 
 TAB = '  '
-
-
-def equal(message, value, target, level='warn'):
-    if value != target:
-        log = get_logger(level)
-        fmt = TAB + message + " %7.4f != %s"
-        log(fmt % (value, str(target)))
 
 
 def interval(message, value, limit, level='warn'):
