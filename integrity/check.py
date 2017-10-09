@@ -40,42 +40,6 @@ def eras(data):
         _assert(msg, n, '==', target[region])
 
 
-def features(data):
-
-    logging.info('FEATURES')
-
-    # nonfinite feature values
-    n = (~np.isfinite(data.x)).sum()
-    _assert('nonfinite feature values', n, '==', 0)
-
-    # abs correlation of features
-    corr = np.corrcoef(data.x.T)
-    corr = upper_triangle(corr)
-    corr = np.abs(corr)
-    interval('mean abs corr of features', corr.mean(), [0.1, 0.2])
-    interval('max  abs corr of features', corr.max(), [0.6, 0.7])
-
-    # distribution of each feature in each era
-    for era, feature_num, x in data.era_feature_iter():
-
-        msg = 'range of feature %2d in %s' % (feature_num, era.ljust(6))
-        array_interval(msg, x, [0, 1])
-
-        msg = 'mean  of feature %2d in %s' % (feature_num, era.ljust(6))
-        interval(msg, x.mean(), [0.4545, 0.5505])
-
-        msg = 'std   of feature %2d in %s' % (feature_num, era.ljust(6))
-        interval(msg, x.std(), [0.09, 0.14])
-
-        msg = 'skewn of feature %2d in %s' % (feature_num, era.ljust(6))
-        skew = ((x - x.mean())**3).mean() / x.std()**3
-        interval(msg, skew, [-0.4, 0.4])
-
-        msg = 'kurto of feature %2d in %s' % (feature_num, era.ljust(6))
-        kurt = ((x - x.mean())**4).mean() / x.std()**4
-        interval(msg, kurt, [2.5, 3.5])
-
-
 def regions(data):
 
     logging.info('REGIONS')
@@ -90,6 +54,42 @@ def regions(data):
         diff = target - regions
         if len(diff) > 0:
             logging.warn('missing regions: %s' % str(diff))
+
+
+def features(data):
+
+    logging.info('FEATURES')
+
+    # nonfinite feature values
+    n = (~np.isfinite(data.x)).sum()
+    _assert('nonfinite feature values', n, '==', 0)
+
+    # abs correlation of features
+    corr = np.corrcoef(data.x.T)
+    corr = upper_triangle(corr)
+    corr = np.abs(corr)
+    interval('mean abs corr of features', corr.mean(), [0.18, 0.22])
+    interval('max  abs corr of features', corr.max(), [0.72, 0.76])
+
+    # distribution of each feature in each era
+    for era, feature_num, x in data.era_feature_iter():
+
+        msg = 'range of feature %2d in %s' % (feature_num, era.ljust(6))
+        array_interval(msg, x, [0, 1])
+
+        msg = 'mean  of feature %2d in %s' % (feature_num, era.ljust(6))
+        interval(msg, x.mean(), [0.45, 0.551])
+
+        msg = 'std   of feature %2d in %s' % (feature_num, era.ljust(6))
+        interval(msg, x.std(), [0.09, 0.15])
+
+        msg = 'skewn of feature %2d in %s' % (feature_num, era.ljust(6))
+        skew = ((x - x.mean())**3).mean() / x.std()**3
+        interval(msg, skew, [-0.44, 0.44])
+
+        msg = 'kurto of feature %2d in %s' % (feature_num, era.ljust(6))
+        kurt = ((x - x.mean())**4).mean() / x.std()**4
+        interval(msg, kurt, [2.45, 3.58])
 
 
 def labels(data):
@@ -117,7 +117,7 @@ def labels(data):
         if era == 'eraX':
             limit = [270000, 280000]
         else:
-            limit = [5940, 6750]
+            limit = [5920, 6800]
         interval(msg, y.size, limit)
 
     # label bias
@@ -143,7 +143,7 @@ def predictions(data):
 
     # check train logloss and consistency
     logloss = log_loss(ytrain, yhat_train)
-    interval('train logloss', logloss, [0.68, 0.688])
+    interval('train logloss', logloss, [0.691, 0.693])
     loglosses = logloss_by_era(eratrain, ytrain, yhat_train)
     consistency = (loglosses < np.log(2)).mean()
     interval('train consistency', consistency, [0.57, 0.84])
@@ -153,11 +153,11 @@ def predictions(data):
 
     # check validation logloss and consistency
     logloss = log_loss(yvalid, yhat)
-    interval('validation logloss', logloss, [0.68, 0.688])
+    interval('validation logloss', logloss, [0.691, 0.693])
     idx = data.region == 'validation'
     loglosses = logloss_by_era(data.era[idx], yvalid, yhat)
     consistency = (loglosses < np.log(2)).mean()
-    interval('validation consistency', consistency, [0.57, 0.84])
+    interval('validation consistency', consistency, [0.5, 0.84])
 
     # check test and live predictions
     for region in ('test', 'live'):
