@@ -17,7 +17,7 @@ To test the integrity of a Numerai dataset::
       integrity check in 55 second
 
 On 2017-10-04 two Numerai datasets were released. Let's run the integrity
-check on the dataset that had problems::
+check on the dataset that was recalled due to its strange behavior::
 
     $ python integrity/run.py -d numerai_dataset_20171004_problems.zip
     INTEGRITY
