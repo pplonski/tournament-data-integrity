@@ -5,7 +5,7 @@ To test the integrity of a Numerai dataset::
 
     $ python integrity/run.py -d numerai_dataset_20171004.zip
     INTEGRITY
-      /data/ni/numerai_dataset_20171004.zip
+      numerai_dataset_20171004.zip
     IDS
     ERAS
     REGIONS
@@ -21,7 +21,7 @@ check on the dataset that was recalled due to its strange behavior::
 
     $ python integrity/run.py -d numerai_dataset_20171004_problems.zip
     INTEGRITY
-      /home/kg/ni/round076_abort/numerai_dataset_20171004_problems.zip
+      numerai_dataset_20171004_problems.zip
     IDS
     ERAS
     REGIONS
