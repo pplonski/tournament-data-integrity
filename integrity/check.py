@@ -19,7 +19,7 @@ def ids(data):
 
     # duplicate ids
     num_duplicate = data.ID.size - np.unique(data.ID).size
-    equal('duplicate ids', num_duplicate, 0)
+    _assert('duplicate ids', num_duplicate, '==', 0)
 
 
 def eras(data):
@@ -34,7 +34,7 @@ def eras(data):
     for region in target:
         n = np.unique(data.era[data.region == region]).size
         msg = 'number of eras in %s' % region
-        equal(msg, n, target[region])
+        _assert(msg, n, '==', target[region])
 
 
 def features(data):
@@ -43,7 +43,7 @@ def features(data):
 
     # nonfinite feature values
     n = (~np.isfinite(data.x)).sum()
-    equal('nonfinite feature values', n, 0)
+    _assert('nonfinite feature values', n, '==', 0)
 
     # abs correlation of features
     corr = np.corrcoef(data.x.T)
@@ -135,6 +135,33 @@ def array_interval(message, arr, limit, level='warn'):
         log = get_logger(level)
         fmt = TAB + message + " [%7.4f, %7.4f] not in %s"
         log(fmt % (amin, amax, str(limit)))
+
+
+def _assert(message, value, op, target, level='warn'):
+    oppo = {'==': '!=',
+            '!=': '==',
+            '>': '<=',
+            '<=': '>',
+            '<': '>=',
+            '>=': '<'}
+    if op not in oppo:
+        raise ValueError('operation `op` is not recognized')
+    if op == '==':
+        failed = value != target
+    elif op == '!=':
+        failed = value == target
+    elif op == '>':
+        failed = value <= target
+    elif op == '<=':
+        failed = value > target
+    elif op == '<':
+        failed = value >= target
+    elif op == '<=':
+        failed = value < target
+    if failed:
+        log = get_logger(level)
+        fmt = TAB + message + " %7.4f %s %s"
+        log(fmt % (value, oppo[op], str(target)))
 
 
 def get_logger(level):
