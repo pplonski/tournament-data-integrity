@@ -79,7 +79,7 @@ There is also a Data object which can be used like this::
     In [2]: data = Data('numerai_dataset_20171004.zip')
     In [3]: data
     Out[3]:
-    /data/ni/numerai_dataset_20171004.zip
+    numerai_dataset_20171004.zip
      884553  rows
          50  features
          98  eras
