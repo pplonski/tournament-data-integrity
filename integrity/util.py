@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.metrics import log_loss
 
 
 def upper_triangle(a):
@@ -16,3 +17,15 @@ def upper_triangle(a):
         s[idx:idx + ni] = si
         idx += ni
     return s
+
+
+def logloss_by_era(era, y, yhat):
+    unique_eras = np.unique(era)
+    n = unique_eras.size
+    logloss = np.zeros(n)
+    for i in range(n):
+        idx = era == unique_eras[i]
+        yi = y[idx]
+        yh = yhat[idx]
+        logloss[i] = log_loss(yi, yh)
+    return logloss

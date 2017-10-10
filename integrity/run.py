@@ -1,9 +1,9 @@
-import os
 import logging
 import time
 
 from integrity.data import Data
 from integrity.check import check
+from integrity.log import config_logging
 
 
 def checker(dataset_zipfile, console=True, logfile=None, warnfile=None):
@@ -36,45 +36,6 @@ def checker(dataset_zipfile, console=True, logfile=None, warnfile=None):
     t = time.time()
     logging.info("DONE")
     logging.info("  integrity check in %d second" % (t - t0))
-
-
-def config_logging(console=True, logfile=None, warnfile=None):
-    """
-    Set up behavior of python logging.
-
-    Will change every package's python logging in the same session as well.
-    """
-
-    logger = logging.getLogger()
-    if len(logger.handlers) > 0:
-        return
-
-    if logfile is None:
-        logfile = os.devnull
-    if warnfile is None:
-        warnfile = os.devnull
-
-    # log
-    fmt = '%(asctime)s %(message)s'
-    datefmt = '%Y-%m-%d %H:%M:%S'
-    logging.basicConfig(filename=logfile, level=logging.INFO, format=fmt,
-                        datefmt=datefmt)
-
-    # warnings log
-    fmt = '%(asctime)s %(message)s'
-    warn = logging.FileHandler(warnfile)
-    warn.setLevel(logging.WARNING)
-    formatter = logging.Formatter(fmt=fmt, datefmt=datefmt)
-    warn.setFormatter(formatter)
-    logging.getLogger('').addHandler(warn)
-
-    # console log
-    if console:
-        shell = logging.StreamHandler()
-        shell.setLevel(logging.INFO)
-        formatter = logging.Formatter('%(message)s')
-        shell.setFormatter(formatter)
-        logging.getLogger('').addHandler(shell)
 
 
 if __name__ == '__main__':

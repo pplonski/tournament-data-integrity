@@ -4,7 +4,8 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import log_loss
 
-from ni.util import upper_triangle
+from integrity.util import upper_triangle, logloss_by_era
+from integrity.log import interval, array_interval, _assert
 
 
 def check(data):
@@ -172,77 +173,3 @@ def calc_yhat(region, clf, data):
     y = data.y[idx]
     yhat = clf.predict_proba(x)[:, 1]
     return y, yhat
-
-
-def logloss_by_era(era, y, yhat):
-    unique_eras = np.unique(era)
-    n = unique_eras.size
-    logloss = np.zeros(n)
-    for i in range(n):
-        idx = era == unique_eras[i]
-        yi = y[idx]
-        yh = yhat[idx]
-        logloss[i] = log_loss(yi, yh)
-    return logloss
-
-
-# ---------------------------------------------------------------------------
-# logging utilities
-
-TAB = '  '
-
-
-def interval(message, value, limit, level='warn'):
-    if value < limit[0] or value > limit[1]:
-        log = get_logger(level)
-        fmt = TAB + message + " %7.4f not in %s"
-        log(fmt % (value, str(limit)))
-
-
-def array_interval(message, arr, limit, level='warn'):
-    amin, amax = arr.min(), arr.max()
-    if amin < limit[0] or amax > limit[1]:
-        log = get_logger(level)
-        fmt = TAB + message + " [%7.4f, %7.4f] not in %s"
-        log(fmt % (amin, amax, str(limit)))
-
-
-def _assert(message, value, op, target, level='warn'):
-    oppo = {'==': '!=',
-            '!=': '==',
-            '>': '<=',
-            '<=': '>',
-            '<': '>=',
-            '>=': '<'}
-    if op not in oppo:
-        raise ValueError('operation `op` is not recognized')
-    if op == '==':
-        failed = value != target
-    elif op == '!=':
-        failed = value == target
-    elif op == '>':
-        failed = value <= target
-    elif op == '<=':
-        failed = value > target
-    elif op == '<':
-        failed = value >= target
-    elif op == '<=':
-        failed = value < target
-    if failed:
-        log = get_logger(level)
-        fmt = TAB + message + " %7.4f %s %s"
-        log(fmt % (value, oppo[op], str(target)))
-
-
-def get_logger(level):
-    if level == 'info':
-        log = logging.info
-    elif level == 'warn':
-        log = logging.warn
-    elif level == 'error':
-        log = logging.error
-    elif level == 'critical':
-        log = logging.critical
-    else:
-        raise ValueError("logging `level` not recognized")
-    return log
