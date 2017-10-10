@@ -109,10 +109,12 @@ def labels(data):
 
         y = data.y[index]
 
-        msg = 'mean of labels in %s' % era.ljust(6)
-        ym = y.mean()
-        interval(msg, ym, [0.499, 0.501])
-        y_mean.append(ym)
+        # labels are missing in eraX
+        if era != 'eraX':
+            msg = 'mean of labels in %s' % era.ljust(6)
+            ym = y.mean()
+            interval(msg, ym, [0.499, 0.501])
+            y_mean.append(ym)
 
         msg = 'num  of labels in %s' % era.ljust(6)
         if era == 'eraX':
