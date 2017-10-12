@@ -12,7 +12,7 @@ class Data(object):
     def __init__(self, dataset_file):
         self.dataset_file = dataset_file
         data = load_dataset(dataset_file)
-        self.ID, self.era, self.region, self.x, self.y = data
+        self.header, self.ID, self.era, self.region, self.x, self.y = data
         self.unique_era = np.unique(self.era)
         self.unique_region = np.unique(self.region)
 
@@ -61,18 +61,21 @@ class Data(object):
 
 def load_dataset(dataset_file):
     zf = zipfile.ZipFile(dataset_file)
-    ID, era, region, x, y = load_csv(zf.open(TRAIN_FILE))
-    ID_t, era_t, region_t, x_t, y_t = load_csv(zf.open(TOURN_FILE))
+    header, ID, era, region, x, y = load_csv(zf.open(TRAIN_FILE))
+    header_t, ID_t, era_t, region_t, x_t, y_t = load_csv(zf.open(TOURN_FILE))
+    header = {'train': header, 'tournament': header_t}
     ID = np.concatenate((ID, ID_t))
     era = np.concatenate((era, era_t))
     region = np.concatenate((region, region_t))
     x = np.concatenate((x, x_t))
     y = np.concatenate((y, y_t))
-    return ID, era, region, x, y
+    return header, ID, era, region, x, y
 
 
 def load_csv(file_like):
-    a = np.loadtxt(file_like, delimiter=',', skiprows=1, dtype=str)
+    a = np.loadtxt(file_like, delimiter=',', skiprows=0, dtype=str)
+    header = a[0]
+    a = a[1:]
     ID = a[:, 0]
     era = a[:, 1]
     region = a[:, 2]
@@ -80,4 +83,4 @@ def load_csv(file_like):
     y = a[:, -1]
     y[y == ''] = np.nan
     y = y.astype(np.float64)
-    return ID, era, region, x, y
+    return header, ID, era, region, x, y
