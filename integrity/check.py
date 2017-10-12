@@ -9,12 +9,36 @@ from integrity.log import interval, array_interval, _assert
 
 
 def check(data):
+    header(data)
     ids(data)
     eras(data)
     regions(data)
     features(data)
     labels(data)
     predictions(data)
+
+
+def header(data):
+
+    logging.info('HEADER')
+
+    # train and tournment csv files should have the same header
+    if (data.header['train'] != data.header['tournament']).any():
+        logging.warn('train and tournament csv files have different headers')
+
+    # columns should be in the correct order. We are especially concerned with
+    # the order of the features which should be feature1, feature2, ... and
+    # not feature1, feature10, feature11, ...
+    header = ['id', 'era', 'data_type']
+    header += ['feature'+str(i) for i in range(1, 51)]
+    header += ['target']
+    for i in range(len(header)):
+        _assert('header column', data.header['train'][i], '==', header[i])
+
+    # should have the correct number of columns
+    actual = len(data.header['train'])
+    desired = len(header)
+    _assert('number of column in csv file', actual, '==', desired)
 
 
 def ids(data):

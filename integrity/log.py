@@ -1,6 +1,8 @@
 import os
 import logging
 
+import numpy as np
+
 TAB = '  '
 
 
@@ -81,7 +83,13 @@ def _assert(message, value, op, target, level='warn'):
         failed = value < target
     if failed:
         log = get_logger(level)
-        fmt = TAB + message + " %7.4f %s %s"
+        # `value` can be a number or a str
+        if type(value) == 'str' or type(value) == np.string_:
+            postfix = " %s %s %s"
+            value = str(value)  # in case it is a np.string_
+        else:
+            postfix = " %7.4f %s %s"
+        fmt = TAB + message + postfix
         log(fmt % (value, oppo[op], str(target)))
 
 
