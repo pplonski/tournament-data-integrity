@@ -93,14 +93,6 @@ There is also a Data object which can be used like this::
      0.2030  mean abs corr
      0.7413  max abs corr
 
-Requirements
-============
-
-- python
-- numpy
-- sklearn
-- pandas
-
 License
 =======
 
