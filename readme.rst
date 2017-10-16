@@ -14,7 +14,7 @@ To test the integrity of a Numerai dataset::
     LABELS
     PREDICTIONS
     DONE
-      integrity check in 55 second
+      integrity check in 38 second
 
 On 2017-10-04 two Numerai datasets were released. Let's run the integrity
 check on the dataset that was recalled due to its strange behavior::
@@ -67,7 +67,7 @@ check on the dataset that was recalled due to its strange behavior::
     PREDICTIONS
       predictions in live region [ 0.2285,  0.7889] not in [0.3719981696219426, 0.61056903427274645]
     DONE
-      integrity check in 56 second
+      integrity check in 38 second
 
 You can optionally write to a logfile and a warnfile by appending
 ``-l logfile.txt`` and ``-w warnfile.txt`` to the command above.
@@ -96,9 +96,10 @@ There is also a Data object which can be used like this::
 Requirements
 ============
 
-- Python
-- NumPy
+- python
+- numpy
 - sklearn
+- pandas
 
 License
 =======

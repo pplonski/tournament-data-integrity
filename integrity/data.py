@@ -1,5 +1,6 @@
 import zipfile
 import numpy as np
+import pandas as pd
 
 from integrity.util import upper_triangle
 
@@ -73,14 +74,22 @@ def load_dataset(dataset_file):
 
 
 def load_csv(file_like):
-    a = np.loadtxt(file_like, delimiter=',', skiprows=0, dtype=str)
-    header = a[0]
-    a = a[1:]
-    ID = a[:, 0]
-    era = a[:, 1]
-    region = a[:, 2]
+
+    # get header
+    header = file_like.readline()
+    header = np.array(header.strip().split(','))  # column header str array
+
+    # load data as np.array
+    a = pd.read_csv(file_like, header=0)
+    a = a.values
+
+    # convert arrays from object dtype
+    ID = a[:, 0].astype(str)
+    era = a[:, 1].astype(str)
+    region = a[:, 2].astype(str)
     x = a[:, 3:-1].astype(np.float64)
     y = a[:, -1]
     y[y == ''] = np.nan
     y = y.astype(np.float64)
+
     return header, ID, era, region, x, y
