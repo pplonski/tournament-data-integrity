@@ -8,7 +8,7 @@ config = {
     "description": "Check integrity of new public dataset",
     "author": "bps",
     "author_email": "xander@numer.ai",
-    "install_requires": [],
+    "install_requires": ["pandas", "numpy", "sklearn"],
     "packages": ["integrity"],
     "name": "Numerai Public Dataset Integrity Check"
 }
