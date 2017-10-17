@@ -46,21 +46,28 @@ def config_logging(console=True, logfile=None, warnfile=None):
 
 
 def interval(message, value, limit, level='warn'):
+    err_count = 0
     if value < limit[0] or value > limit[1]:
+        err_count = 1
         log = get_logger(level)
         fmt = TAB + message + " %7.4f not in %s"
         log(fmt % (value, str(limit)))
+    return err_count
 
 
 def array_interval(message, arr, limit, level='warn'):
+    err_count = 0
     amin, amax = arr.min(), arr.max()
     if amin < limit[0] or amax > limit[1]:
+        err_count = 1
         log = get_logger(level)
         fmt = TAB + message + " [%7.4f, %7.4f] not in %s"
         log(fmt % (amin, amax, str(limit)))
+    return err_count
 
 
 def _assert(message, value, op, target, level='warn'):
+    err_count = 0
     oppo = {'==': '!=',
             '!=': '==',
             '>': '<=',
@@ -91,6 +98,9 @@ def _assert(message, value, op, target, level='warn'):
             postfix = " %7.4f %s %s"
         fmt = TAB + message + postfix
         log(fmt % (value, oppo[op], str(target)))
+    if failed:
+        err_count = 1
+    return err_count
 
 
 def get_logger(level):

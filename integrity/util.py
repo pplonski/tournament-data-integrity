@@ -7,7 +7,6 @@ def upper_triangle(a):
     if a.ndim != 2:
         raise ValueError("`a` must be 2d")
     n = a.shape[0]
-    print(n)
     if n != a.shape[1]:
         raise ValueError("`a` must be square")
     s = np.empty(n * (n - 1) // 2)
