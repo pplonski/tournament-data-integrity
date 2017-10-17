@@ -17,6 +17,7 @@ def check(data):
     err_count += features(data)
     err_count += labels(data)
     err_count += predictions(data)
+    err_count += targets(data)
     return err_count
 
 
@@ -237,3 +238,25 @@ def calc_yhat(region, clf, data):
     y = data.y[idx]
     yhat = clf.predict_proba(x)[:, 1]
     return y, yhat
+
+def targets(data):
+
+    logging.info('TARGETS')
+
+    err_count = 0
+
+    # Test that there are no targets for test and live rows.
+    for region in ['test', 'live']:
+        target = data.y[data.region == region]
+        nan_rows = np.sum(np.isnan(target))
+        msg = 'all targets should be NaN in %s' % region
+        err_count += _assert(msg, nan_rows, '==', target.shape[0])
+
+    # Test that there are targets of exactly 0 or 1 for validation and train.
+    for region in ['train', 'validation']:
+        target = data.y[data.region == region]
+        values = np.unique(target)
+        msg = 'target values should be [0, 1] in %s' % region
+        err_count += _assert(msg, list(values), '==', list([0, 1]))
+
+    return err_count

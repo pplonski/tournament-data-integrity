@@ -66,6 +66,7 @@ def array_interval(message, arr, limit, level='warn'):
     return err_count
 
 
+
 def _assert(message, value, op, target, level='warn'):
     err_count = 0
     oppo = {'==': '!=',
@@ -91,7 +92,7 @@ def _assert(message, value, op, target, level='warn'):
     if failed:
         log = get_logger(level)
         # `value` can be a number or a str
-        if type(value) == 'str' or type(value) == np.string_:
+        if type(value) == 'str' or type(value) == np.string_ or type(value) is list:
             postfix = " %s %s %s"
             value = str(value)  # in case it is a np.string_
         else:
