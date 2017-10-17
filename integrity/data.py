@@ -74,13 +74,9 @@ def load_dataset(dataset_file):
 
 
 def load_csv(file_like):
-
-    # get header
-    header = file_like.readline()
-    header = np.array(header.strip().split(','))  # column header str array
-
     # load data as np.array
     a = pd.read_csv(file_like, header=0)
+    header = a.columns.values
     a = a.values
 
     # convert arrays from object dtype
